@@ -1,7 +1,9 @@
 const express = require("express");
-const router = express.Router();
 
 const waitlistController = require("./../controller/waitlistController")
+const router = express.Router();
+
+
 
 router.route("/")
 .get(waitlistController.getWaitlistUsers)

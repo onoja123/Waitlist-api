@@ -1,4 +1,4 @@
-const user = require("../models/user")
+const User = require("../models/user")
 const catchAsync = require("../utils/catchAsync")
 const {waitlist} = require("./../utils/validator")
 const AppError = require("./../utils/appError")
@@ -11,34 +11,34 @@ exports.addUsersToWailist = catchAsync(async (req, res, next)=>{
     if (!valid) {
         return next (new AppError("email is not valid"), 422);
       } else {
-        user.findOne({ email: user }).then((result) => {
+        User.findOne({ email: user }).then((result) => {
           if (result) {
             return  next (new AppError("Email already in waitlist"), 200)
           } else {
 
             //create transporter
-            const transport = nodemailer.createTransport(
-              {
-                service: 'gmail',
-                auth: {
-                  user: "",
-                  password: ""
-                }
-              })
+            var transport = nodemailer.createTransport({
+              host: "smtp.mailtrap.io",
+              port: 2525,
+              auth: {
+                user: " ",
+                pass: " "
+              }
+            });
               //send out mails
 
               const mailOptions = {
-                from: "okpeonoja18@gmail.com",
-                to: "lucydidam18@gmail.com",
+                from: "dummy12@gmail.com",
+                to: "dummy818@gmail.com",
                 subject: "test email",
                 text: "this is the body of the mail"
               }
 
-              transport.sendMail(mailOptions, (error, info)=>{
+              transport.sendMail(mailOptions,  async(error, info)=>{
                 if(error){
                   return  next (new AppError("and error occured"), 401)
                 }else{
-                  const newuser = user.create(req.body)
+                  const newuser = await User.create(req.body)
                       res.status(201)
                       .json({
                         status: 'successfully added',
@@ -54,7 +54,6 @@ exports.addUsersToWailist = catchAsync(async (req, res, next)=>{
             
           }})
 
-          //send email to users that added emmail
  
 }
 
@@ -66,11 +65,12 @@ exports.addUsersToWailist = catchAsync(async (req, res, next)=>{
 
 //Get users in the waitlist
 exports.getWaitlistUsers = catchAsync (async (req, res) =>{
-    const user = await user.findById(req.params.id)
+    const user = await User.find()
 
         res.status(201)
             .json({
              status: 'success',
+             result: user.length,
                  data: {
                     user
                 }

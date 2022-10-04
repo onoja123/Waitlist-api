@@ -7,7 +7,7 @@ class AppError extends Error{
 
         this.operational = undefined
 
-        error.captureStackTrace(this, this.constructor)
+        Error.captureStackTrace(this, this.constructor)
     }
 }
 
