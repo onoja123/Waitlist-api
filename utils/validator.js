@@ -1,6 +1,6 @@
 const validator = require('validator')
 
-module.exports.waitlist = (email) => {
+module.exports.waitlistV = (email) => {
 	const errors = {};
 	if (!validator.isEmail(email)){
 		errors["email"] = "Not a valid email address";

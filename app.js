@@ -4,8 +4,13 @@ const app = express();
 
 app.use(express.json())
 
-// get home page
+// Get url
 app.use("/api/waitlist", waitlistController);
 
+app.use("*", (req, res, next)=>{
+    res.status(404).json({
+        status: "404 Not Found"
+    })
+})
 
 module.exports = app;
